@@ -12,25 +12,19 @@ import java.util.*;
 
 @Controller
 public class CarController {
+
+    private final CarService carService;
+
     @Autowired
-    private CarService carService;
+    CarController(CarService carService){
+        this.carService = carService;
+    };
 
     @GetMapping("/cars")
     public String carsPage (@RequestParam(value = "count", defaultValue = "5") int count, Model model) {
-        System.out.println(count);
+        List<Car> cars = carService.getCars(count);
+        model.addAttribute("cars", cars);
 
-        List<Car> carList = new ArrayList<>();
-        carList.add(new Car("One", "V6", 500));
-        carList.add(new Car("Two", "V12", 250));
-        carList.add(new Car("Three", "V8", 400));
-        carList.add(new Car("Four", "V6", 550));
-        carList.add(new Car("Five", "V12", 300));
-
-        if (count >= 5) {
-            model.addAttribute("cars", carService.getCars(carList, 5));
-        } else {
-            model.addAttribute("cars", carService.getCars(carList, count));
-        }
         return "cars";
     }
 }

@@ -6,14 +6,20 @@ import web.dao.CarDao;
 import web.model.Car;
 
 import java.util.List;
+
 @Service
 public class CarServiceImpl implements CarService {
 
-    @Autowired
-    public CarDao carDao;
+    private final CarDao carDao;
+
+    public CarServiceImpl(CarDao carDao) {
+        this.carDao = carDao;
+    }
 
     @Override
-    public List<Car> getCars(List<Car> cars, int count) {
-        return carDao.getCars(cars, count);
+    public List<Car> getCars(int count) {
+        int maxCarsNumber = 5;
+        int minCount = Math.min(count, maxCarsNumber);
+        return carDao.getCars(minCount);
     }
 }
